@@ -1,0 +1,20 @@
+node
+{
+    def mavenHome = tool name : "mvn3.8.6"
+    
+    stage('checkoutcode'){
+   git branch: 'development', url: 'https://github.com/Captain524/maven-web-application.git'
+        }
+   stage('build'){
+       sh "${mavenHome}/bin/mvn clean package"
+   }
+stage('deploy'){
+ 
+   //   sshagent(['79913b58-0dfc-48c3-9565-77d011c153e8']) {
+
+    // sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ubuntu@13.233.214.126:/opt/apache-tomcat-9.0.67/webapps"
+  deploy adapters: [tomcat9(credentialsId: '02f2a6fe-a312-4407-9f82-f7b66687f7c2', path: '', url: 'http://13.233.214.126:8080')], contextPath: null, war: '**/maven-web-application.war'
+   
+   
+}
+}
