@@ -1,0 +1,30 @@
+pipeline
+{
+    agent any
+    
+    tools{
+        maven "mvn3.8.2"
+    }
+    stages{
+        stage("checkoutcode"){
+            steps{
+                git branch: 'master', url: 'https://github.com/Captain524/maven-web-application.git'
+            }
+        }
+    stage('build'){
+        steps{
+            sh "mvn clean package"
+        }
+        
+        
+    }
+    stage('deploy'){
+        steps{
+            
+        
+        deploy adapters: [tomcat9(credentialsId: '02f2a6fe-a312-4407-9f82-f7b66687f7c2', path: '', url: 'http://13.233.214.126:8080')], contextPath: null, war: '**/maven-web-application.war'
+    }
+        
+    }
+}
+}
